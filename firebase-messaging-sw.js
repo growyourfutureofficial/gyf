@@ -1,7 +1,7 @@
 // ==========================================
 // 1. OFFLINE CACHING ENGINE (No Internet Dinosaur Fix)
 // ==========================================
-const CACHE_NAME = 'buildmoney-offline-cache-v8';
+const CACHE_NAME = 'buildmoney-offline-cache-v9';
 const urlsToCache = [
     './',
     './index.html',
