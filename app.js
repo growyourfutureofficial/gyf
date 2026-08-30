@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
     // 🛡️ IIT EXPERT FIX: ANTI-INSPECT & RIGHT-CLICK SECURITY ENGINE
-    // ==========================================
+    // ========================================== 
     
     // 1. Right Click (Context Menu) Disabled
     document.addEventListener('contextmenu', (event) => {
