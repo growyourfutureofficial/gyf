@@ -1,0 +1,1085 @@
+/* Base Reset & Native App Feel */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent; 
+    
+    /* 🚀 IIT EXPERT FIX: Forced Selection Block */
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important; /* Mobile Popup Killer */
+    
+    touch-action: pan-y; 
+}
+
+/* Let user type in input boxes only */
+input, textarea {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Native App Feature: Permanently Hide Scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* 🚀 IIT EXPERT FIX: Permanent block on elastic rubber-band scrolling */
+html, body {
+    overscroll-behavior: none; 
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+}
+
+body {
+    background-color: #f0f2f5; /* Desktop mode pe grey background */
+    color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+/* 🚀 IIT EXPERT FIX: Force Bottom System Bar to be Pure White on Mobile Phones */
+@media (max-width: 480px) {
+    body { background-color: #ffffff; } 
+}
+
+#app-container {
+    width: 100%;
+    max-width: 480px; /* Mobile width container - Desktop mode me yahi fix rahega */
+    min-height: 100vh;
+    background: #ffffff;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Desktop me phone jaisa depth look */
+}
+
+/* Material Icons Custom Styling (Outline & Filled control) */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+.material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+/* Animations */
+.screen {
+    animation: fadeIn 0.3s ease-in-out;
+    padding: 85px 1.5rem 2rem 1.5rem; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(20px); } /* Sliding effect jaisa native app me hota hai */
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Typography & General */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-green { color: #1b6e35; }
+.font-bold { font-weight: bold; }
+.cursor-pointer { cursor: pointer; }
+
+h1 { font-size: 26px; margin-bottom: 8px; color: #000; }
+h2 { font-size: 24px; margin-bottom: 10px; color: #1a1a1a; }
+.subtitle { font-size: 14px; color: #7a7a7a; margin-bottom: 30px; }
+
+/* ==========================================
+   PREMIUM NATIVE LOGIN SCREEN UI
+   ========================================== */
+.login-header-premium {
+    margin-bottom: 35px;
+    text-align: center;
+    animation: fadeInDown 0.4s ease-out;
+}
+
+/* Authentic Android/iOS App Icon Shadow & Radius */
+.premium-app-logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px; 
+    object-fit: cover;
+    box-shadow: 0 12px 28px rgba(27, 110, 53, 0.28); 
+    margin-bottom: 18px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.premium-app-logo:active {
+    transform: scale(0.92);
+}
+
+.premium-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+
+.premium-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.premium-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+/* Modern Input Boxes with Inner Icons */
+.premium-input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.premium-input-wrapper .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 22px;
+    transition: color 0.2s ease;
+}
+
+.premium-input-wrapper input {
+    width: 100%;
+    padding: 16px 16px 16px 48px;
+    background-color: #f3f4f6;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.premium-input-wrapper input::placeholder {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+/* Dynamic Focus Highlight */
+.premium-input-wrapper input:focus {
+    background-color: #ffffff;
+    border-color: #1b6e35;
+    box-shadow: 0 4px 15px rgba(27, 110, 53, 0.1);
+}
+
+.premium-input-wrapper input:focus ~ .input-icon {
+    color: #1b6e35;
+}
+
+.forgot-link-premium {
+    font-size: 13px;
+    font-weight: 750;
+    color: #1b6e35;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.forgot-link-premium:active { opacity: 0.7; }
+
+/* 3D Action Button */
+.btn-premium-login {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #1b6e35 0%, #124d1a 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(27, 110, 53, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-premium-login:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 10px rgba(27, 110, 53, 0.2);
+}
+
+.register-prompt {
+    margin-top: 35px;
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 600;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.register-link {
+    color: #1b6e35;
+    font-weight: 800;
+    margin-left: 4px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.register-link:active { opacity: 0.7; border-color: #1b6e35; }
+
+/* Hardware Accelerated Animations */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Forms */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+.input-group input {
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    font-size: 16px;
+    outline: none;
+    transition: 0.2s border;
+}
+
+.input-group input:focus {
+    border-color: #1b6e35;
+    background-color: #ffffff;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #1b6e35;
+    color: #ffffff;
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s background-color;
+}
+
+.btn-primary:active { background-color: #145227; }
+
+/* Links */
+.forgot-link { display: block; margin-top: 20px; font-size: 15px; }
+.bottom-link { margin-top: 30px; font-size: 15px; color: #333; }
+
+/* Top Navigation (100% Bulletproof Fixed Header) */
+.top-nav {
+    position: fixed; 
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    z-index: 1000;
+    background-color: #ffffff; 
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.nav-title {
+    font-size: 18px;
+    font-weight: bold;
+    flex-grow: 1;
+    text-align: left; /* Slightly better native look */
+}
+
+
+/* ==========================================
+   PREMIUM CUSTOM ALERT (Native App Feel)
+   ========================================== */
+.custom-alert-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px); /* Premium iPhone feel */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Sabse upar dikhega */
+    opacity: 0;
+    animation: fadeInOverlay 0.2s forwards;
+}
+
+.custom-alert-box {
+    background: #ffffff;
+    width: 85%;
+    max-width: 320px;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: scale(0.9);
+    animation: popIn 0.2s forwards ease-out;
+}
+
+.alert-icon {
+    font-size: 40px;
+    color: #1b6e35;
+    margin-bottom: 12px;
+}
+
+#custom-alert-message {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+#custom-alert-btn {
+    background: #1b6e35;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#custom-alert-btn:active { background: #145227; }
+
+@keyframes fadeInOverlay { to { opacity: 1; } }
+@keyframes popIn { to { transform: scale(1); } }
+
+
+/* ==========================================
+   HOME SCREEN / DASHBOARD UI (Google Pay Style)
+   ========================================== */
+.dashboard-layout {
+    padding: 1.5rem 1.5rem 90px 1.5rem; /* Bottom padding 90px taaki content Nav bar ke piche na chhupe */
+    background-color: #f8f9fa; /* Light grey background jisse white cards pop out honge */
+    min-height: 100vh;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-text p { font-size: 14px; color: #7a7a7a; margin-bottom: 2px;}
+.header-text h2 { font-size: 24px; color: #1a1a1a; font-weight: bold;}
+.logout-btn { cursor: pointer; color: #1a1a1a; font-size: 28px !important; }
+
+/* Wallet Card (Premium Navy Blue with Shine Support) */
+.wallet-card {
+    background: linear-gradient(135deg, #7D0802 0%, #3B0402 100%);
+    border-radius: 20px;
+    padding: 24px 20px;
+    color: white;
+    position: relative; /* Shine animation ke liye mandatory */
+    overflow: hidden; /* Shine ko card ke bahar block karne ke liye */
+}
+
+/* Bulletproof Shining Animation Engine */
+.wallet-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    animation: premiumShine 4s infinite; /* 4 second ka auto-loop */
+    pointer-events: none; /* Strictly no interference with user clicks */
+    z-index: 1;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: skewX(-25deg) translateZ(0);
+}
+
+@keyframes premiumShine {
+    0% { left: -150%; }
+    40% { left: 150%; } /* 40% time me shine card cross karega */
+    100% { left: 150%; } /* Baaki 60% time rukega taaki natural aur professional lage */
+}
+
+.wallet-balance-label { font-size: 14px; opacity: 0.9; margin-bottom: 4px; }
+.wallet-amount { font-size: 42px; font-weight: bold; margin-bottom: 20px; letter-spacing: -1px; }
+
+.wallet-stats { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 14px;
+    border-top: 1px solid rgba(255,255,255,0.15); /* Subtle divider */
+    padding-top: 15px;
+}
+
+.badge-inactive { 
+    background: #fff3e0; 
+    color: #e65100; 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    font-size: 13px; 
+}
+
+/* Wallet Action Buttons (Deposit, Withdraw, Submit) */
+.wallet-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 12px;
+}
+
+.action-btn {
+    flex: 1;
+    background: white;
+    color: #1e3c72; /* IIT Expert Fix: Theme matched to Navy Blue */
+    border: none;
+    border-radius: 14px;
+    padding: 16px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.1s;
+    position: relative; /* Shine layer se upar proper click detect karne ke liye */
+    z-index: 2; 
+}
+
+.action-btn:active { transform: scale(0.95); }
+.action-btn .material-symbols-outlined { font-size: 24px; margin-bottom: 8px; font-weight: 300;}
+
+/* Info Cards */
+.section-title { font-size: 18px; font-weight: bold; margin: 30px 0 10px 0; color: #1a1a1a; }
+.empty-state { font-size: 15px; color: #7a7a7a; }
+
+
+/* ==========================================
+   DAILY BONUS CARD (Golden UI)
+   ========================================== */
+.bonus-card {
+    background-color: #fdfaf2;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-top: 25px;
+    border: 1px solid #f2dbb3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(230, 180, 100, 0.08);
+}
+
+.bonus-content h3 { font-size: 16px; color: #d68b1e; margin-bottom: 4px; font-weight: bold; }
+.bonus-content p { font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 6px; max-width: 200px; }
+.bonus-content .claimed-days { font-size: 12px; color: #999; }
+
+.btn-golden {
+    background: #f0c375;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s background-color, transform 0.1s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-golden:active { transform: scale(0.95); background: #e3b05a; }
+
+.btn-golden:disabled {
+    background: #e6cd9e;
+    color: #ffffff;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.8;
+}
+
+
+.plan-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-top: 25px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.plan-card h3 { font-size: 18px; color: #1a1a1a; margin-bottom: 8px; font-weight: bold;}
+.plan-card p { font-size: 15px; color: #7a7a7a; line-height: 1.5; }
+
+/* ==========================================
+   BOTTOM NAVIGATION (Google Pay Capsule Style)
+   ========================================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    margin: 0 auto; 
+    width: 100%;
+    max-width: 480px; 
+    background: #C8F0F7;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 10px calc(20px + env(safe-area-inset-bottom)) 10px; 
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    z-index: 1000;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    
+    /* 🚀 IIT EXPERT FIX: Touch Drag Lock (Robotic Effect Killer) */
+    touch-action: none; /* Prevents any page drag/swipe originating from the navbar */
+    -webkit-user-drag: none; /* Strict enforcement for Safari & WebKit */
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #444746; /* Default Unfocused Grey */
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 64px; /* Fixed width for standard capsule size */
+}
+
+/* The Capsule Container */
+.nav-item .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 32px;
+    border-radius: 16px; /* Perfect pill/capsule shape */
+    margin-bottom: 4px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.nav-item .material-symbols-outlined,
+.nav-item .material-symbols-rounded {
+    font-size: 24px;
+    color: #444746;
+    transition: color 0.2s ease-in-out;
+}
+
+/* Active State Styles (GPay Effect) */
+.nav-item.active {
+    color: #1a1a1a; /* Darker text for active */
+}
+
+.nav-item.active .icon-container {
+    background: #c4eed0; /* Light Green Capsule Background */
+}
+
+.nav-item.active .icon-container span {
+    color: #1b6e35; /* Dark Green Filled Icon */
+}
+
+
+/* ==========================================
+   DEPOSIT & ACTIVATE SCREEN STYLES
+   ========================================== */
+.plan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+/* Base Plan Card */
+.plan-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px 20px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.plan-card-item .plan-info h4 {
+    font-size: 16px;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.plan-card-item .plan-price {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1b6e35;
+}
+
+/* Selected/Active Plan State */
+.plan-card-item.active {
+    border: 2px solid #1b6e35;
+    background-color: #f4faf6; /* Subtle green glow */
+    box-shadow: 0 4px 12px rgba(27, 110, 53, 0.1);
+    transform: scale(1.02);
+}
+
+/* Payment Instructions Box */
+.payment-instruction-box {
+    background-color: #eaf6ed; /* Soft light green matching screenshot */
+    border: 1px solid #c3e6cb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+/* Dashed Screenshot Upload Box */
+.screenshot-upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #1b6e35;
+    border-radius: 12px;
+    padding: 40px 20px;
+    background-color: #fafafa;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 25px;
+}
+
+.screenshot-upload-box:active {
+    background-color: #f0f0f0;
+}
+
+
+/* ==========================================
+   ADMIN ENGINE NEUMORPHISM (SOFT UI)
+   ========================================== */
+.neumorphic-wrapper {
+    min-height: 100vh;
+    background-color: #f2f5f8; /* Soft bluish-grey background for perfect 3D pop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* The exact circular container from screenshot */
+.neumorphic-circle {
+    width: 330px;
+    height: 330px;
+    border-radius: 50%;
+    background-color: #f2f5f8;
+    box-shadow: 14px 14px 28px #d6d9dc, -14px -14px 28px #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: popIn 0.4s ease-out;
+}
+
+.admin-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: #4a4a4a;
+    margin-bottom: 2px;
+    letter-spacing: -0.5px;
+}
+
+.admin-subtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: #7a828a;
+    margin-bottom: 25px;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 40px;
+}
+
+/* Inset 3D Inputs */
+.neumorphic-input-group {
+    width: 100%;
+    height: 42px;
+    border-radius: 25px;
+    background-color: #f2f5f8;
+    box-shadow: inset 6px 6px 12px #d6d9dc, inset -6px -6px 12px #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    margin-bottom: 18px;
+}
+
+.neumorphic-input-group input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    font-size: 14px;
+    color: #4a4a4a;
+    font-weight: 500;
+}
+
+.neumorphic-input-group input::placeholder {
+    color: #9ea5ac;
+}
+
+/* Screenshot Exact Icons Configuration */
+.icon-user { color: #f24e6b !important; font-size: 18px !important; }
+.icon-lock { color: #9ea5ac !important; font-size: 18px !important; }
+
+/* Outset 3D Button */
+.neumorphic-btn {
+    width: 60%;
+    padding: 12px 0;
+    border-radius: 25px;
+    background-color: #f2f5f8;
+    border: none;
+    color: #6a737d;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 1px;
+    box-shadow: 6px 6px 12px #d6d9dc, -6px -6px 12px #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-top: 10px;
+}
+
+/* Button Press Effect */
+.neumorphic-btn:active {
+    box-shadow: inset 4px 4px 8px #d6d9dc, inset -4px -4px 8px #ffffff;
+    color: #4a4a4a;
+    transform: scale(0.97);
+}
+
+/* ==========================================
+   ADMIN ENGINE DASHBOARD (MULTICOLOR GRIDS)
+   ========================================== */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns ka strict matrix */
+    gap: 15px;
+    padding-bottom: 30px;
+}
+
+/* Make the first priority item take full width */
+.admin-grid .admin-card:nth-child(1) {
+    grid-column: span 2; 
+}
+
+.admin-card {
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    position: relative;
+    overflow: hidden;
+    min-height: 135px;
+}
+
+.admin-card:active {
+    transform: scale(0.95);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+}
+
+.admin-card .material-symbols-rounded {
+    font-size: 34px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.admin-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+}
+
+/* Glassmorphism Notification Badge */
+.glass-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Premium Multicolor Action Gradients */
+.card-deposit { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); } /* Ocean Blue */
+.card-withdraw { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); } /* Amber Orange */
+.card-queries { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); } /* Royal Purple */
+.card-submit { background: linear-gradient(135deg, #10b981 0%, #059669 100%); } /* Emerald Green */
+.card-accounts { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); } /* Rose Red */
+
+
+/* ==========================================
+   ADMIN LIST CARDS (DEPOSIT REQUESTS UI)
+   ========================================== */
+.request-list-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.request-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.request-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.request-info p {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.request-info small {
+    color: #94a3b8;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+}
+
+.icon-small {
+    font-size: 13px !important;
+    margin-right: 4px;
+}
+
+.btn-view-details {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 10px;
+}
+
+.btn-view-details:active {
+    transform: scale(0.92);
+    background-color: #dbeafe;
+}
+
+/* Seamless Loader Animation */
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+
+/* ==========================================
+   LOGIN SCREEN TRUST & SECURITY UI
+   ========================================== */
+.trust-stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 25px;
+    width: 100%;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.trust-stat-box {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 16px;
+    padding: 12px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease;
+}
+
+.trust-stat-box:active {
+    transform: scale(0.95);
+}
+
+.trust-stat-box .stat-icon {
+    font-size: 20px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.trust-stat-box h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111827;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+}
+
+.trust-stat-box p {
+    font-size: 9px;
+    font-weight: 800;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+/* Security Footer */
+.login-trust-footer {
+    margin-top: auto; /* Pushes footer to the bottom */
+    padding-top: 25px;
+    text-align: center;
+    width: 100%;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.privacy-promise {
+    color: #10b981;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+/* 🚀 IIT EXPERT FIX: Smart Auto-Hide Engine on Keyboard Open */
+@media (max-height: 600px) {
+    .trust-stats-container, .login-trust-footer {
+        display: none !important; /* Hides stats & footer so inputs are perfectly visible while typing */
+    }
+    .login-header-premium {
+        margin-bottom: 15px !important;
+        margin-top: 0 !important;
+    }
+}
+
+
+
+/* ==========================================
+   DYNAMIC ACCOUNT STATUS BADGES UI
+   ========================================== */
+.badge-inactive {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    border: 1px solid #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Premium Verified Blue Tick Badge */
+.badge-verified {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: #2563eb;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    border: 1px solid #bfdbfe;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+    animation: popInVerified 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popInVerified {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
