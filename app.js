@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
     // 🛡️ IIT EXPERT FIX: ANTI-INSPECT & RIGHT-CLICK SECURITY ENGINE
-    // ========================================== 
+    // ==========================================
     
     // 1. Right Click (Context Menu) Disabled
     document.addEventListener('contextmenu', (event) => {
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-Q-bEcICQgfVK6yU3OtgfS9jjdoQABsy_Kaa8ADtbvvbzadMt1ovxFL7gAInjUz6pwg/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiltcdmz_rZoNn8BQre7-ZcH4yhn5di5s3k89W7rXIP4hA_0nGIxwPQZlSAjp0cKbp6g/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -827,21 +827,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function fetchSubmitHistory(email) {
             try {
-                let res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getUserProfile', email: email }) });
-                let data = await res.json();
+                // 🛡️ IIT EXPERT ENGINE: Extract Secure UID
+                const activeUser = firebase.auth().currentUser;
+                const secureUid = activeUser ? activeUser.uid : "GHOST_USER";
+
+                let res = await fetch(GOOGLE_SCRIPT_URL, { 
+                    method: 'POST', 
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🛡️ CORS Shield
+                    body: JSON.stringify({ action: 'getUserProfile', email: email, uid: secureUid }) 
+                });
+                
+                let textRes = await res.text();
+                let data = JSON.parse(textRes); // 🛡️ JSON Crash Failsafe
+                
                 document.getElementById('submitLoadingIndicator').style.display = 'none';
 
                 if (data.status === "success") {
+                    
+                    // 🚀 IIT EXPERT FIX: Explicit UI State Toggle Engine
+                    const uploadSec = document.getElementById('submitUploadSection');
+                    const submittedSec = document.getElementById('alreadySubmittedSection');
+                    
                     if (data.hasSubmittedToday) {
-                        document.getElementById('submitUploadSection').style.display = 'none';
-                        document.getElementById('alreadySubmittedSection').style.display = 'block';
+                        if(uploadSec) uploadSec.style.display = 'none';
+                        if(submittedSec) submittedSec.style.display = 'block';
+                    } else {
+                        if(uploadSec) uploadSec.style.display = 'block';
+                        if(submittedSec) submittedSec.style.display = 'none';
                     }
+
                     let sArr = data.submitHistory || [];
                     sArr.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
                     window.submitDataCache = sArr;
                     renderSubmitList();
+                } else {
+                    console.error("Submit History Blocked: ", data.message);
                 }
-            } catch(e) {}
+            } catch(e) {
+                console.error("Failed to fetch submit history:", e);
+                document.getElementById('submitLoadingIndicator').innerHTML = `<p style="color:#e11d48; font-size:12px; font-weight: bold;">Network Sync Error</p>`;
+            }
         }
 
         window.switchSubmitTab = function(tab) {
@@ -1380,12 +1405,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function fetchTeamData(email) {
             try {
+                // 🛡️ IIT EXPERT ENGINE: Secure background UID extraction
+                const activeUser = firebase.auth().currentUser;
+                const secureUid = activeUser ? activeUser.uid : "GHOST_USER";
+
                 let res = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: 'getTeamStats', email: email })
+                    body: JSON.stringify({ action: 'getTeamStats', email: email, uid: secureUid })
                 });
-                let data = await res.json();
+                
+                // 🛡️ IIT EXPERT ENGINE: Failsafe Text Parsing (Prevents HTML Redirect Death)
+                let textRes = await res.text();
+                let data = JSON.parse(textRes);
 
                 if (data.status === "success") {
                     document.getElementById('myRefCodeDisplay').innerText = data.myReferralCode || "ERROR";
@@ -1564,11 +1596,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function fetchWalletHistory(email) {
             try {
+                // 🛡️ IIT EXPERT ENGINE: Extract Secure UID
+                const activeUser = firebase.auth().currentUser;
+                const secureUid = activeUser ? activeUser.uid : "GHOST_USER";
+
                 let res = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'getUserProfile', email: email })
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🛡️ CORS Shield
+                    body: JSON.stringify({ 
+                        action: 'getUserProfile', 
+                        email: email, 
+                        uid: secureUid // 🛡️ Anti-CSRF Token for backend verification
+                    })
                 });
-                let data = await res.json();
+                
+                let textRes = await res.text();
+                let data = JSON.parse(textRes); // 🛡️ JSON Crash Failsafe
                 
                 document.getElementById('walletLoadingIndicator').style.display = 'none';
 
@@ -1591,8 +1634,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Instantly render default tab
                     renderWalletList();
+                } else {
+                    console.error("Wallet History Blocked: ", data.message);
+                    document.getElementById('walletLoadingIndicator').innerHTML = `<p style="color:#e11d48; font-size:13px; font-weight: bold;">Security Block: ${data.message}</p>`;
                 }
             } catch(e) {
+                console.error("Failed to fetch wallet history:", e);
                 document.getElementById('walletLoadingIndicator').innerHTML = `<p style="color:#e11d48; font-size:13px; font-weight: bold;">Network Connection Weak. Please Refresh.</p>`;
             }
         }
@@ -2424,16 +2471,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if(user) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: 'getUserProfile', email: user.email })
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🛡️ IIT EXPERT FIX: CORS Preflight Shield
+                body: JSON.stringify({ 
+                    action: 'getUserProfile', 
+                    email: user.email,
+                    uid: user.uid // 🛡️ IIT EXPERT FIX: Anti-CSRF Token attached for backend authorization
+                })
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(res => res.text()) // 🛡️ IIT EXPERT FIX: Failsafe text parsing to prevent JSON crash
+            .then(textRes => {
+                let data = JSON.parse(textRes);
                 if(data.status === "success") {
                     currentBal = data.walletBalance;
                     balDisplay.innerText = `₹${currentBal}.00`;
-                    isUserActive = (data.accountStatus === "Active"); // 🚀 Extract Status
+                    isUserActive = (data.accountStatus === "Active"); 
                     
-                    // 🚀 IIT EXPERT FIX: Client-side UI Hardware Lock
                     if (!isUserActive) {
                         btn.disabled = true;
                         btn.style.opacity = '0.5';
@@ -2444,6 +2496,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } else {
                     balDisplay.innerText = "Error";
+                    console.error("Backend Rejected Request:", data.message);
                 }
             })
             .catch(() => balDisplay.innerText = "Network Error");
@@ -3196,7 +3249,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
-    if (false && !isStandalone) {
+    
+    // 🛡️ IIT EXPERT ENGINE: Strict Mandatory Install Wall Activated (Developer Bypass Removed)
+    if (!isStandalone) {
         document.getElementById('app-container').style.display = 'none';
         const installWall = document.createElement('div');
         installWall.innerHTML = `
