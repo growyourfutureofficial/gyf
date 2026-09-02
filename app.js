@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiltcdmz_rZoNn8BQre7-ZcH4yhn5di5s3k89W7rXIP4hA_0nGIxwPQZlSAjp0cKbp6g/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzujlLyP5BInmW04UsAnWL58Ej7Fj3qS5bAnoEXrkc121cV03-OOGLGO9RAQpzYvsalrA/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -1384,6 +1384,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
+                    <!-- 🚀 IIT EXPERT: 10% Mutual Bonus Notification Banner -->
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px dashed rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; text-align: left;">
+                        <div style="background: #10b981; color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 900; font-size: 14px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);">10%</div>
+                        <p style="margin: 0; font-size: 12px; color: #cbd5e1; font-weight: 500; line-height: 1.4;"><strong style="color: #34d399;">Mutual Cash Bonus:</strong> When your friend joins and activates a plan, <strong style="color: #ffffff;">BOTH of you</strong> instantly get a 10% cash bonus!</p>
+                    </div>
+
                     <!-- Native Share Button -->
                     <button onclick="shareMyReferral()" style="width: 100%; background: #10b981; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); cursor: pointer; transition: 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
                         <span class="material-symbols-rounded">share</span> Share Referral Code
@@ -1518,7 +1524,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const code = document.getElementById('myRefCodeDisplay').innerText;
             if (code === "------" || code === "ERROR") return showCustomAlert("Code loading...");
             const refLink = `${window.location.origin}${window.location.pathname}?ref=${code}#register`;
-            const shareText = `Hey! Join GYF and start earning daily. Click my link to register directly:`;
+            
+            // 🚀 IIT EXPERT: Updated Share Text to maximize 10% Mutual Bonus Conversion
+            const shareText = `Hey! Join GYF using my link. Activate your account and we BOTH get a 10% instant cash bonus! Click here to register:`;
             
             if (navigator.share) {
                 navigator.share({ title: 'Join GYF', text: shareText, url: refLink }).catch(console.error);
