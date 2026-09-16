@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzujlLyP5BInmW04UsAnWL58Ej7Fj3qS5bAnoEXrkc121cV03-OOGLGO9RAQpzYvsalrA/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkAxdptd-A0rVJsbXSAzOU2nBqJsnv1g2yWpba3Wu-n2Ph5l6tDYWaL0QGHr0XJtciDA/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
