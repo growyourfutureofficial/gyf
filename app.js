@@ -439,6 +439,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="material-symbols-outlined logout-btn" id="logoutBtn">logout</span>
                 </div>
 
+                <!-- 🚀 IIT EXPERT FEATURE: Dynamic 16:9 Notice Banner -->
+                <div id="noticeBannerContainer" style="display: none; width: 100%; aspect-ratio: 16/9; background: #e2e8f0; border-radius: 16px; margin-bottom: 25px; overflow: hidden; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); animation: fadeInDown 0.4s ease-out;">
+                    <div id="noticeBannerLoader" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #94a3b8; display: flex; flex-direction: column; align-items: center;">
+                        <span class="material-symbols-rounded" style="animation: spin 1s linear infinite; font-size: 28px;">sync</span>
+                    </div>
+                    <img id="noticeBannerImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;" onload="this.style.display='block'; document.getElementById('noticeBannerLoader').style.display='none';" onerror="document.getElementById('noticeBannerContainer').style.display='none';">
+                </div>
+
                 <div class="wallet-card">
                     <!-- 🚀 IIT EXPERT FIX: Premium Privacy Eye Toggle Header -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -550,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(user) {
             // App UI instantly dikhe, isliye background mein fetch call lagaya hai
             syncUserProfileAndBonus(user.email);
+            fetchNoticeBanner(); // 🚀 Fetch Dynamic Banner Seamlessly
         }
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -749,7 +758,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
+    // 🚀 IIT EXPERT FEATURE: Notice Banner Fetch Engine
+    async function fetchNoticeBanner() {
+        try {
+            let res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: 'getNoticeBanner' })
+            });
+            let textRes = await res.text();
+            let result = JSON.parse(textRes);
+            
+            if (result.status === "success" && result.bannerLink) {
+                const bannerContainer = document.getElementById('noticeBannerContainer');
+                const bannerImg = document.getElementById('noticeBannerImg');
+                if (bannerContainer && bannerImg) {
+                    bannerContainer.style.display = 'block';
+                    bannerImg.src = result.bannerLink;
+                }
+            }
+        } catch(e) {
+            console.error("Banner Fetch Error:", e);
+        }
+    }
 
     // ==========================================
     // 🚀 PREMIUM SUBMIT WORK SCREEN (Dual-Tab & Max 1 Engine)
@@ -1029,6 +1060,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h2 id="liveUsersCount" style="font-size: 28px; font-weight: 800; margin: 0; line-height: 1; color: white;">-</h2>
                         </div>
                         <h4 style="margin-top: 15px;">Total Users</h4>
+                    </div>
+                    
+                    <!-- 🚀 IIT EXPERT FEATURE: Notice Banner Management (Full Width Grid) -->
+                    <div class="admin-card" onclick="openNoticeBannerModal()" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); cursor: pointer; grid-column: span 2;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span class="material-symbols-rounded">campaign</span>
+                        </div>
+                        <h4 style="margin-top: 15px;">Notice Banner Control</h4>
+                        <div class="glass-badge">Delete & Upload</div>
                     </div>
                 </div>
             </div>
@@ -2820,6 +2860,101 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = false;
             showCustomAlert("Error: " + e.message);
         }
+    };
+
+    // ==========================================
+    // 🚀 IIT EXPERT FEATURE: ADMIN NOTICE BANNER ENGINE
+    // ==========================================
+    window.openNoticeBannerModal = function() {
+        const modalHtml = `
+            <div id="noticeBannerModalOverlay" class="custom-alert-overlay" style="display: flex;">
+                <div class="custom-alert-box" style="width: 90%; max-width: 400px; text-align: left; padding: 24px; position: relative;">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+                        <span class="material-symbols-rounded" style="color: #0ea5e9; font-size: 24px; margin-right: 8px;">campaign</span>
+                        <h3 style="color: #0f172a; font-size: 18px; margin: 0;">Notice Banner Control</h3>
+                    </div>
+                    
+                    <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; font-weight: 500;">Select a 16:9 ratio image. The old banner will be securely deleted and replaced automatically.</p>
+                    
+                    <!-- 16:9 Live Preview Box (Dynamically Shrinks without changing parent CSS) -->
+                    <label class="screenshot-upload-box" for="noticeBannerFile" id="noticePreviewBox" style="border: 2px dashed #0ea5e9; aspect-ratio: 16/9; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f0f9ff; cursor: pointer; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+                        <span class="material-symbols-outlined" style="font-size: 36px; color: #0ea5e9; margin-bottom: 8px;" id="noticeUploadIcon">add_photo_alternate</span>
+                        <p style="color: #0ea5e9; font-weight: 800; font-size: 14px; margin: 0;" id="noticeUploadText">Tap to select 16:9 image</p>
+                        <input type="file" id="noticeBannerFile" accept="image/*" style="display: none;">
+                    </label>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="document.getElementById('noticeBannerModalOverlay').remove()" style="flex: 1; padding: 14px; border: none; background: #f1f5f9; color: #475569; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 13px;">Cancel</button>
+                        <button id="deleteUploadBannerBtn" style="flex: 1; padding: 14px; border: none; background: #0ea5e9; color: white; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 13px; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25);">Delete & Upload</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        let base64String = null;
+        let mimeType = null;
+        let fileName = null;
+
+        document.getElementById('noticeBannerFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64String = event.target.result.split(',')[1];
+                    mimeType = file.type;
+                    fileName = file.name;
+                    
+                    const previewBox = document.getElementById('noticePreviewBox');
+                    previewBox.style.backgroundImage = `url(${event.target.result})`;
+                    previewBox.style.backgroundSize = 'cover';
+                    previewBox.style.backgroundPosition = 'center';
+                    previewBox.style.borderStyle = 'solid';
+                    
+                    document.getElementById('noticeUploadText').style.display = 'none';
+                    document.getElementById('noticeUploadIcon').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('deleteUploadBannerBtn').addEventListener('click', async function() {
+            if (!base64String) {
+                showCustomAlert("Kindly select an image first!");
+                return;
+            }
+            
+            const btn = document.getElementById('deleteUploadBannerBtn');
+            btn.innerText = "Uploading safely...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+
+            try {
+                let res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ 
+                        action: 'updateNoticeBanner',
+                        adminToken: sessionStorage.getItem('buildMoneyAdminToken'),
+                        imageBase64: base64String,
+                        mimeType: mimeType,
+                        imageName: fileName
+                    })
+                });
+                let textRes = await res.text();
+                let result = JSON.parse(textRes);
+
+                if (result.status === "success") {
+                    document.getElementById('noticeBannerModalOverlay').remove();
+                    showCustomAlert("Banner Live Updated Successfully! Users will see it on app reload.");
+                } else throw new Error(result.message);
+            } catch(e) {
+                btn.innerText = "Delete & Upload";
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                showCustomAlert("Upload Failed: " + e.message);
+            }
+        });
     };
 
     // ==========================================
