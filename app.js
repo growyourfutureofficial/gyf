@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkAxdptd-A0rVJsbXSAzOU2nBqJsnv1g2yWpba3Wu-n2Ph5l6tDYWaL0QGHr0XJtciDA/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgRM40KXqWbnrYYaWGM_gVBV6EkgJBvyQVzca38qY8NghpaUPZtfYGeVIyFUCaJKlhTA/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -2896,23 +2896,60 @@ document.addEventListener('DOMContentLoaded', () => {
         let mimeType = null;
         let fileName = null;
 
+        // 🚀 IIT EXPERT ENGINE: Smart Canvas Image Compression & Auto-Cropper
         document.getElementById('noticeBannerFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    base64String = event.target.result.split(',')[1];
-                    mimeType = file.type;
-                    fileName = file.name;
-                    
-                    const previewBox = document.getElementById('noticePreviewBox');
-                    previewBox.style.backgroundImage = `url(${event.target.result})`;
-                    previewBox.style.backgroundSize = 'cover';
-                    previewBox.style.backgroundPosition = 'center';
-                    previewBox.style.borderStyle = 'solid';
-                    
-                    document.getElementById('noticeUploadText').style.display = 'none';
-                    document.getElementById('noticeUploadIcon').style.display = 'none';
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        // 🚀 Force perfect 16:9 ratio and max width 1280px for HD performance
+                        const targetWidth = 1280;
+                        const targetHeight = 720;
+                        
+                        canvas.width = targetWidth;
+                        canvas.height = targetHeight;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // 🚀 Smart Auto-Crop Math (Fills the 16:9 frame without stretching)
+                        const imgRatio = img.width / img.height;
+                        const targetRatio = targetWidth / targetHeight;
+                        let drawWidth = img.width;
+                        let drawHeight = img.height;
+                        let offsetX = 0;
+                        let offsetY = 0;
+
+                        if (imgRatio > targetRatio) {
+                            drawWidth = img.height * targetRatio;
+                            offsetX = (img.width - drawWidth) / 2;
+                        } else {
+                            drawHeight = img.width / targetRatio;
+                            offsetY = (img.height - drawHeight) / 2;
+                        }
+
+                        // Draw HD cropped image onto the virtual canvas
+                        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight, 0, 0, targetWidth, targetHeight);
+                        
+                        // 🚀 Compress to Web-Optimized JPEG (Stops the "Failed to Fetch" Server Crash)
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        
+                        base64String = compressedDataUrl.split(',')[1];
+                        mimeType = 'image/jpeg';
+                        fileName = 'notice_banner_hd.jpg';
+                        
+                        // Update UI Preview
+                        const previewBox = document.getElementById('noticePreviewBox');
+                        previewBox.style.backgroundImage = `url(${compressedDataUrl})`;
+                        previewBox.style.backgroundSize = 'cover';
+                        previewBox.style.backgroundPosition = 'center';
+                        previewBox.style.borderStyle = 'solid';
+                        
+                        document.getElementById('noticeUploadText').style.display = 'none';
+                        document.getElementById('noticeUploadIcon').style.display = 'none';
+                    };
+                    img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
