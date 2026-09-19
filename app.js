@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbxuIRufBXEuSh5zBx-yZWjvxRxxbiOgP6tEciqB0D6bfWgdCf88mTR_iWA5od_kD52w/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4vNVl9eXx8Z_omjulYwOuXqTMvgaTWcsLahcwJmAMu0bVhEkpNTRDityHnJLo1DGPCw/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -2862,10 +2862,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
     // ==========================================
     // 🚀 IIT EXPERT FEATURE: ADMIN NOTICE BANNER ENGINE
     // ==========================================
     window.openNoticeBannerModal = function() {
+        
+        // 🛡️ IIT EXPERT FIX: Destroy any existing ghost modals to strictly prevent ID Collisions & Duplicate API Hits
+        const existingModal = document.getElementById('noticeBannerModalOverlay');
+        if (existingModal) existingModal.remove();
+
         const modalHtml = `
             <div id="noticeBannerModalOverlay" class="custom-alert-overlay" style="display: flex;">
                 <div class="custom-alert-box" style="width: 90%; max-width: 400px; text-align: left; padding: 24px; position: relative;">
@@ -2876,7 +2882,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; font-weight: 500;">Select a 16:9 ratio image. The old banner will be securely deleted and replaced automatically.</p>
                     
-                    <!-- 16:9 Live Preview Box (Dynamically Shrinks without changing parent CSS) -->
                     <label class="screenshot-upload-box" for="noticeBannerFile" id="noticePreviewBox" style="border: 2px dashed #0ea5e9; aspect-ratio: 16/9; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f0f9ff; cursor: pointer; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
                         <span class="material-symbols-outlined" style="font-size: 36px; color: #0ea5e9; margin-bottom: 8px;" id="noticeUploadIcon">add_photo_alternate</span>
                         <p style="color: #0ea5e9; font-weight: 800; font-size: 14px; margin: 0;" id="noticeUploadText">Tap to select 16:9 image</p>
@@ -2892,10 +2897,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-        // 🛡️ IIT EXPERT FIX: Scope-isolated variables to prevent RAM bleeding
+        // Scope-isolated variables to prevent RAM bleeding
         window.currentNoticeUpload = { base64: null, mime: null, name: null };
 
-        // 🚀 IIT EXPERT ENGINE: Replaced addEventListener with strict .onchange to kill concurrent clone requests
         document.getElementById('noticeBannerFile').onchange = function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -2904,21 +2908,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
-                        // 🚀 Force perfect 16:9 ratio and max width 1280px for HD performance
-                        const targetWidth = 1280;
-                        const targetHeight = 720;
+                        // 🚀 IIT EXPERT FIX: 800x450 resolution completely eliminates payload timeouts while staying HD on mobile
+                        const targetWidth = 800;
+                        const targetHeight = 450;
                         
                         canvas.width = targetWidth;
                         canvas.height = targetHeight;
                         const ctx = canvas.getContext('2d');
                         
-                        // 🚀 Smart Auto-Crop Math (Fills the 16:9 frame without stretching)
                         const imgRatio = img.width / img.height;
                         const targetRatio = targetWidth / targetHeight;
                         let drawWidth = img.width;
                         let drawHeight = img.height;
-                        let offsetX = 0;
-                        let offsetY = 0;
+                        let offsetX = 0; let offsetY = 0;
 
                         if (imgRatio > targetRatio) {
                             drawWidth = img.height * targetRatio;
@@ -2928,17 +2930,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             offsetY = (img.height - drawHeight) / 2;
                         }
 
-                        // Draw HD cropped image onto the virtual canvas
                         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight, 0, 0, targetWidth, targetHeight);
-                        
-                        // 🚀 Compress to Web-Optimized JPEG
-                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // Slightly higher quality, smaller res
                         
                         window.currentNoticeUpload.base64 = compressedDataUrl.split(',')[1];
                         window.currentNoticeUpload.mime = 'image/jpeg';
-                        window.currentNoticeUpload.name = 'notice_banner_hd.jpg';
+                        window.currentNoticeUpload.name = 'notice_banner.jpg';
                         
-                        // Update UI Preview
                         const previewBox = document.getElementById('noticePreviewBox');
                         previewBox.style.backgroundImage = `url(${compressedDataUrl})`;
                         previewBox.style.backgroundSize = 'cover';
@@ -2954,7 +2952,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // 🛡️ IIT EXPERT FIX: Strict .onclick to prevent duplicate "Server Busy" API hits from ghost listeners
+        // 🛡️ Strict .onclick guarantees only 1 network request fires
         document.getElementById('deleteUploadBannerBtn').onclick = async function() {
             if (!window.currentNoticeUpload.base64) {
                 showCustomAlert("Kindly select an image first!");
