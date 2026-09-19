@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgRM40KXqWbnrYYaWGM_gVBV6EkgJBvyQVzca38qY8NghpaUPZtfYGeVIyFUCaJKlhTA/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbxuIRufBXEuSh5zBx-yZWjvxRxxbiOgP6tEciqB0D6bfWgdCf88mTR_iWA5od_kD52w/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -2892,12 +2892,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-        let base64String = null;
-        let mimeType = null;
-        let fileName = null;
+        // 🛡️ IIT EXPERT FIX: Scope-isolated variables to prevent RAM bleeding
+        window.currentNoticeUpload = { base64: null, mime: null, name: null };
 
-        // 🚀 IIT EXPERT ENGINE: Smart Canvas Image Compression & Auto-Cropper
-        document.getElementById('noticeBannerFile').addEventListener('change', function(e) {
+        // 🚀 IIT EXPERT ENGINE: Replaced addEventListener with strict .onchange to kill concurrent clone requests
+        document.getElementById('noticeBannerFile').onchange = function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -2932,12 +2931,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Draw HD cropped image onto the virtual canvas
                         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight, 0, 0, targetWidth, targetHeight);
                         
-                        // 🚀 Compress to Web-Optimized JPEG (Stops the "Failed to Fetch" Server Crash)
+                        // 🚀 Compress to Web-Optimized JPEG
                         const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         
-                        base64String = compressedDataUrl.split(',')[1];
-                        mimeType = 'image/jpeg';
-                        fileName = 'notice_banner_hd.jpg';
+                        window.currentNoticeUpload.base64 = compressedDataUrl.split(',')[1];
+                        window.currentNoticeUpload.mime = 'image/jpeg';
+                        window.currentNoticeUpload.name = 'notice_banner_hd.jpg';
                         
                         // Update UI Preview
                         const previewBox = document.getElementById('noticePreviewBox');
@@ -2953,10 +2952,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 reader.readAsDataURL(file);
             }
-        });
+        };
 
-        document.getElementById('deleteUploadBannerBtn').addEventListener('click', async function() {
-            if (!base64String) {
+        // 🛡️ IIT EXPERT FIX: Strict .onclick to prevent duplicate "Server Busy" API hits from ghost listeners
+        document.getElementById('deleteUploadBannerBtn').onclick = async function() {
+            if (!window.currentNoticeUpload.base64) {
                 showCustomAlert("Kindly select an image first!");
                 return;
             }
@@ -2973,9 +2973,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ 
                         action: 'updateNoticeBanner',
                         adminToken: sessionStorage.getItem('buildMoneyAdminToken'),
-                        imageBase64: base64String,
-                        mimeType: mimeType,
-                        imageName: fileName
+                        imageBase64: window.currentNoticeUpload.base64,
+                        mimeType: window.currentNoticeUpload.mime,
+                        imageName: window.currentNoticeUpload.name
                     })
                 });
                 let textRes = await res.text();
@@ -2991,7 +2991,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.style.opacity = "1";
                 showCustomAlert("Upload Failed: " + e.message);
             }
-        });
+        };
     };
 
     // ==========================================
