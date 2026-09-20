@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // MASTER GOOGLE SCRIPT URL (Global Engine Scope)
     // ==========================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYwd3631PiQNT6T8NWiUU0Yu0l8wK-ZloQ2P0QbA7ORQTTjThy0GoV4vlVBY9pPsm2Ow/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPPdEq7PYC_-e-rL0HsszRC3_KBPl8ahASqQnoqWApZrqCkXfnLh10NTO7Ay0GtATtcA/exec";
 
     // ==========================================
     // PREMIUM CUSTOM ALERT FUNCTION
@@ -1761,6 +1761,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (item.status === "Approved") {
                     badgeHtml = `<span style="background: #dcfce7; color: #059669; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;"><span class="material-symbols-rounded" style="font-size: 14px;">check_circle</span> APPROVED</span>`;
+                } else if (item.status === "Rejected") {
+                    badgeHtml = `<span style="background: #ffe4e6; color: #e11d48; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;"><span class="material-symbols-rounded" style="font-size: 14px;">cancel</span> REJECTED</span>`;
+                    titleText = `Request rejected`;
                 } else {
                     badgeHtml = `<span style="background: #fff3e0; color: #ea580c; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;"><span class="material-symbols-rounded" style="font-size: 14px;">schedule</span> PENDING</span>`;
                 }
@@ -3356,8 +3359,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let actionButtons = '';
         if (req.status === 'Pending') {
             actionButtons = `
-                <button onclick="closeAdminWithdrawModal()" style="flex: 1; padding: 12px; border: none; background: #e2e8f0; border-radius: 8px; cursor: pointer; font-weight: bold; color: #475569;">Cancel</button>
-                <button id="verifyWithdrawBtn" onclick="approveWithdrawReq(${req.rowNumber})" style="flex: 1; padding: 12px; border: none; background: #f59e0b; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">Withdraw Accepted</button>
+                <button onclick="closeAdminWithdrawModal()" style="flex: 1; padding: 10px; border: none; background: #e2e8f0; color: #475569; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px;">Cancel</button>
+                <button id="rejectWithdrawBtn" onclick="rejectWithdrawReq(${req.rowNumber})" style="flex: 1; padding: 10px; border: none; background: #ffe4e6; color: #e11d48; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; box-shadow: 0 2px 6px rgba(225, 29, 72, 0.15);">Reject</button>
+                <button id="verifyWithdrawBtn" onclick="approveWithdrawReq(${req.rowNumber})" style="flex: 1; padding: 10px; border: none; background: #f59e0b; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">Accept</button>
             `;
         } else {
             actionButtons = `
@@ -3419,6 +3423,39 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(e) {
             btn.innerText = "Withdraw Accepted";
             btn.disabled = false;
+            showCustomAlert("Error: " + e.message);
+        }
+    };
+
+    // 🚀 NEW ENGINE: Admin Reject Withdraw Request (Triggers Refund)
+    window.rejectWithdrawReq = async function(rowNumber) {
+        const rejectBtn = document.getElementById('rejectWithdrawBtn');
+        const verifyBtn = document.getElementById('verifyWithdrawBtn');
+        
+        rejectBtn.innerText = "Rejecting...";
+        rejectBtn.disabled = true;
+        verifyBtn.disabled = true; // Lock both to prevent double clicking
+
+        try {
+            let res = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ 
+                    action: 'rejectWithdraw', 
+                    rowNumber: rowNumber, 
+                    adminToken: sessionStorage.getItem('buildMoneyAdminToken') 
+                })
+            });
+            let result = await res.json();
+            if (result.status === "success") {
+                showCustomAlert("Withdraw Rejected & Amount Refunded to User!");
+                closeAdminWithdrawModal();
+                fetchAdminWithdraws(); // Automatically refresh list
+            } else throw new Error(result.message);
+        } catch(e) {
+            rejectBtn.innerText = "Reject";
+            rejectBtn.disabled = false;
+            verifyBtn.disabled = false;
             showCustomAlert("Error: " + e.message);
         }
     };
